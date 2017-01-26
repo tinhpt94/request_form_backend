@@ -1,0 +1,36 @@
+package forms
+
+import java.util.Date
+
+import play.api.data.Form
+import play.api.data.Forms._
+
+object RequestFormCreate {
+
+  val requestFormCreate = Form(
+    mapping(
+      "title" -> nonEmptyText,
+      "numberCode" -> nonEmptyText,
+      "version" -> number,
+      "content" -> nonEmptyText,
+      "levelApprove1" -> optional(text),
+      "levelApprove2" -> optional(text),
+      "levelApprove3" -> optional(text),
+      "startDate" -> optional(date("dd-MM-yyyy HH:mm:ss")),
+      "endDate" -> optional(date("dd-MM-yyyy HH:mm:ss"))
+    )(RequestFormCreateData.apply)(RequestFormCreateData.unapply)
+  )
+
+  case class RequestFormCreateData(
+    title:         String,
+    numberCode:    String,
+    version:       Int,
+    content:       String,
+    levelApprove1: Option[String],
+    levelApprove2: Option[String],
+    levelApprove3: Option[String],
+    startDate:     Option[Date],
+    endDate:       Option[Date]
+  )
+
+}
