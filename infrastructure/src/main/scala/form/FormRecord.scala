@@ -1,7 +1,5 @@
 package form
 
-import java.util.Date
-
 import scalikejdbc._
 
 case class FormRecord(
@@ -13,8 +11,8 @@ case class FormRecord(
   levelApprove1: Option[String],
   levelApprove2: Option[String],
   levelApprove3: Option[String],
-  startDate:     Option[Date],
-  endDate:       Option[Date]
+  startDate:     Boolean,
+  endDate:       Boolean
 )
 
 object FormRecord extends SQLSyntaxSupport[FormRecord] {
@@ -30,7 +28,7 @@ object FormRecord extends SQLSyntaxSupport[FormRecord] {
     levelApprove1 = rs.stringOpt(n.levelApprove1),
     levelApprove2 = rs.stringOpt(n.levelApprove2),
     levelApprove3 = rs.stringOpt(n.levelApprove3),
-    startDate     = rs.dateOpt(n.startDate),
-    endDate       = rs.dateOpt(n.endDate)
+    startDate     = rs.boolean(n.startDate),
+    endDate       = rs.boolean(n.endDate)
   )
 }

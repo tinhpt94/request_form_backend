@@ -1,8 +1,5 @@
 package controllers.requestform
 
-import java.text.SimpleDateFormat
-import java.util.Date
-
 import forms.RequestFormCreate._
 import model.form.{FormID, RequestForm}
 import org.specs2.mock.Mockito
@@ -18,8 +15,6 @@ class RequestFormControllerSpec extends PlaySpecification with Mockito {
   private val mockRequestFormRepository = mock[RequestFormRepository]
   private val requestFormControllerWithMock = new RequestFormController(mockRequestFormRepository)
 
-  private val sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
-
   private val dummyRequestForm = RequestForm(
     FormID(1L),
     "Form xin nghi phep",
@@ -29,8 +24,8 @@ class RequestFormControllerSpec extends PlaySpecification with Mockito {
     Some("Team Leader"),
     Some("Manager"),
     Some("Director"),
-    Some(new Date()),
-    Some(new Date())
+    true,
+    false
   )
 
   private val dummyRequestFormData = RequestFormCreateData(
@@ -41,13 +36,9 @@ class RequestFormControllerSpec extends PlaySpecification with Mockito {
     Some("Team Leader"),
     Some("Manager"),
     Some("Director"),
-    Some(new Date()),
-    Some(new Date())
+    true,
+    false
   )
-
-  private val dateWrites: Writes[Date] = new Writes[Date] {
-    def writes(d: Date): JsValue = JsString(sdf.format(d))
-  }
 
   implicit val requestFormJsonWrite: Writes[RequestFormCreateData] = (
     (__ \ "title").write[String] and
@@ -57,8 +48,8 @@ class RequestFormControllerSpec extends PlaySpecification with Mockito {
     (__ \ "levelApprove1").writeNullable[String] and
     (__ \ "levelApprove2").writeNullable[String] and
     (__ \ "levelApprove3").writeNullable[String] and
-    (__ \ "startDate").writeNullable[Date](dateWrites) and
-    (__ \ "endDate").writeNullable[Date](dateWrites)
+    (__ \ "startDate").write[Boolean] and
+    (__ \ "endDate").write[Boolean]
   )(unlift(RequestFormCreateData.unapply))
 
   "RequestFormController" should {
@@ -68,7 +59,7 @@ class RequestFormControllerSpec extends PlaySpecification with Mockito {
 
         val apiResult = call(
           requestFormControllerWithMock.createRequestForm,
-          FakeRequest(POST, "/admin/form")
+          FakeRequest(POST, "api/admin/form")
             .withJsonBody(Json.toJson(dummyRequestFormData))
         )
 
@@ -81,8 +72,20 @@ class RequestFormControllerSpec extends PlaySpecification with Mockito {
 
           val apiResult = call(
             requestFormControllerWithMock.createRequestForm,
-            FakeRequest(POST, "/admin/form")
+            FakeRequest(POST, "api/admin/form")
               .withJsonBody(Json.toJson(dummyRequestFormData.copy(title = "")))
+          )
+
+          status(apiResult) mustEqual 400
+        }
+
+        "if version is missing" in new WithApplication() {
+          mockRequestFormRepository.create(any[RequestForm]) returns Failure(new Exception)
+
+          val apiResult = call(
+            requestFormControllerWithMock.createRequestForm,
+            FakeRequest(POST, "api/admin/form")
+              .withJsonBody(Json.toJson(dummyRequestFormData).as[JsObject] - "version")
           )
 
           status(apiResult) mustEqual 400
@@ -93,9 +96,11 @@ class RequestFormControllerSpec extends PlaySpecification with Mockito {
 
           val apiResult = call(
             requestFormControllerWithMock.createRequestForm,
-            FakeRequest(POST, "/admin/form")
+            FakeRequest(POST, "api/admin/form")
               .withJsonBody(Json.toJson(dummyRequestFormData.copy(numberCode = "")))
           )
+
+          status(apiResult) mustEqual 400
         }
 
         "if content is missing" in new WithApplication() {
@@ -103,9 +108,35 @@ class RequestFormControllerSpec extends PlaySpecification with Mockito {
 
           val apiResult = call(
             requestFormControllerWithMock.createRequestForm,
-            FakeRequest(POST, "/admin/form")
+            FakeRequest(POST, "api/admin/form")
               .withJsonBody(Json.toJson(dummyRequestFormData.copy(content = "")))
           )
+
+          status(apiResult) mustEqual 400
+        }
+
+        "if startDate is missing" in new WithApplication() {
+          mockRequestFormRepository.create(any[RequestForm]) returns Failure(new Exception)
+
+          val apiResult = call(
+            requestFormControllerWithMock.createRequestForm,
+            FakeRequest(POST, "api/admin/form")
+              .withJsonBody(Json.toJson(dummyRequestFormData).as[JsObject] - "startDate")
+          )
+
+          status(apiResult) must throwAn[Exception]
+        }
+
+        "if endDate is missing" in new WithApplication() {
+          mockRequestFormRepository.create(any[RequestForm]) returns Failure(new Exception)
+
+          val apiResult = call(
+            requestFormControllerWithMock.createRequestForm,
+            FakeRequest(POST, "api/admin/form")
+              .withJsonBody(Json.toJson(dummyRequestFormData).as[JsObject] - "endDate")
+          )
+
+          status(apiResult) must throwAn[Exception]
         }
       }
     }

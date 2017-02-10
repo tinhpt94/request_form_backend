@@ -1,7 +1,5 @@
 package form
 
-import java.util.Date
-
 import play.api.test.PlaySpecification
 import scalikejdbc.config.DBs
 import scalikejdbc.specs2.mutable.AutoRollback
@@ -21,8 +19,8 @@ class FormDAOSpec extends PlaySpecification {
     Some("Team Leader"),
     Some("Manager"),
     Some("Director"),
-    Some(new Date()),
-    Some(new Date())
+    true,
+    true
   )
 
   "FormDAO" should {

@@ -1,7 +1,5 @@
 package repository.form
 
-import java.util.Date
-
 import form.{FormDAO, FormRecord}
 import model.form.{FormID, RequestForm}
 import org.specs2.mock.Mockito
@@ -23,8 +21,8 @@ class RequestFormRepositorySpec extends PlaySpecification with Mockito {
     Some("Team Leader"),
     Some("Manager"),
     Some("Director"),
-    Some(new Date()),
-    Some(new Date())
+    true,
+    true
   )
 
   private val dummyFormRecord = FormRecord(
@@ -36,8 +34,8 @@ class RequestFormRepositorySpec extends PlaySpecification with Mockito {
     Some("Team Leader"),
     Some("Manager"),
     Some("Director"),
-    Some(new Date()),
-    Some(new Date())
+    true,
+    true
   )
 
   "FormRepository" should {

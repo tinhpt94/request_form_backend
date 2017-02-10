@@ -1,9 +1,7 @@
 package model.user
 
-import java.util.Date
-
 import identity.Id
-import model.form.{FormID, RequestForm}
+import model.form.{ FormID, RequestForm }
 
 case class User(role: Role) {
 
@@ -15,8 +13,8 @@ case class User(role: Role) {
     levelApprove1: Option[String],
     levelApprove2: Option[String],
     levelApprove3: Option[String],
-    startDate:     Option[Date],
-    endDate:       Option[Date]
+    startDate:     Boolean,
+    endDate:       Boolean
   ): RequestForm = RequestForm(
     FormID(Id().randomID),
     title,

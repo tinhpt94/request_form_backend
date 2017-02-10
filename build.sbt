@@ -56,11 +56,6 @@ lazy val domain = (project in file("domain"))
   .enablePlugins(PlayScala)
   .settings(commonSettings: _*)
   .settings(
-    libraryDependencies ++= Seq(
-      "com.github.rholder.fauxflake" % "fauxflake-core" % "1.1.0"
-    )
-  )
-  .settings(
     name += ".domain",
     scalaSource in Compile := baseDirectory.value / "src" / "main" / "scala",
     scalaSource in Test := baseDirectory.value / "src" / "test" / "scala",
@@ -74,6 +69,7 @@ lazy val infrastructure = (project in file("infrastructure"))
   .settings(
     name += ".infrastructure",
     libraryDependencies ++= Seq(
+      "com.github.rholder.fauxflake" % "fauxflake-core" % "1.1.0",
       "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcVersion,
       "org.scalikejdbc" %% "scalikejdbc-test" % scalikejdbcVersion % "test",
       "org.scalikejdbc" %% "scalikejdbc-config" % scalikejdbcVersion,

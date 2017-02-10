@@ -1,7 +1,5 @@
 package forms
 
-import java.util.Date
-
 import play.api.data.Form
 import play.api.data.Forms._
 
@@ -16,8 +14,8 @@ object RequestFormCreate {
       "levelApprove1" -> optional(text),
       "levelApprove2" -> optional(text),
       "levelApprove3" -> optional(text),
-      "startDate" -> optional(date("dd-MM-yyyy HH:mm:ss")),
-      "endDate" -> optional(date("dd-MM-yyyy HH:mm:ss"))
+      "startDate" -> boolean,
+      "endDate" -> boolean
     )(RequestFormCreateData.apply)(RequestFormCreateData.unapply)
   )
 
@@ -29,8 +27,8 @@ object RequestFormCreate {
     levelApprove1: Option[String],
     levelApprove2: Option[String],
     levelApprove3: Option[String],
-    startDate:     Option[Date],
-    endDate:       Option[Date]
+    startDate:     Boolean,
+    endDate:       Boolean
   )
 
 }

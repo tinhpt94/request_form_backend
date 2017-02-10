@@ -3,8 +3,8 @@ package controllers.requestform
 import javax.inject.Inject
 
 import forms.RequestFormCreate._
-import model.user.{Role, User}
-import play.api.mvc.{Action, Controller}
+import model.user.{ Role, User }
+import play.api.mvc.{ Action, Controller }
 import repository.form.RequestFormRepository
 import responses.ErrorJson._
 

@@ -2,8 +2,8 @@ package repository.form
 
 import javax.inject.Inject
 
-import form.{FormDAO, FormRecord}
-import model.form.{FormID, RequestForm}
+import form.{ FormDAO, FormRecord }
+import model.form.{ FormID, RequestForm }
 
 import scala.util.Try
 
